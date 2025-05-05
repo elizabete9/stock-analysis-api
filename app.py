@@ -1,0 +1,25 @@
+from flask import Flask, request, jsonify
+from stock_analysis_bot import StockAnalysisBot  # Put your class in stock_analysis_bot.py
+
+app = Flask(__name__)
+bot = StockAnalysisBot()
+
+@app.route("/analyze", methods=["GET"])
+def analyze():
+    symbol = request.args.get("symbol", "AAPL")
+    df = bot.get_data(symbol, days=30)
+    if df is None:
+        return jsonify({"error": "Invalid data"}), 400
+
+    df = bot.calculate_technical_indicators(df)
+    fib = bot.calculate_fibonacci_levels(df)
+    momentum = bot.calculate_momentum(df)
+    trend = bot.predict_trend(df)
+    entry_exit = bot.calculate_entry_exit(df, fib, df['close'].iloc[-1], 0.02)
+
+    result = {
+        "momentum": momentum,
+        "trend": trend,
+        "entry_exit": entry_exit
+    }
+    return jsonify(result)
