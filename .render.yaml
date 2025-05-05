@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: stock-bot-api
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python app.py
