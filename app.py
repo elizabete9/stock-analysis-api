@@ -1,15 +1,16 @@
-from flask import Flask, request, jsonify
-from stock_analysis_bot import StockAnalysisBot  # Put your class in stock_analysis_bot.py
-from flask import render_template
+from flask import Flask, request, jsonify, render_template
+from stock_analysis_bot import StockAnalysisBot  # Make sure this file exists
 import os
 
 app = Flask(__name__)
 bot = StockAnalysisBot()
 
-@app.route("/analyze", methods=["GET"])
+@app.route("/")
 def home():
     return render_template("index.html")
-def analyze():
+
+@app.route("/analyze", methods=["GET"])
+def analyze_stock():
     symbol = request.args.get("symbol", "AAPL")
     df = bot.get_data(symbol, days=30)
     if df is None:
