@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from stock_analysis_bot import StockAnalysisBot  # Put your class in stock_analysis_bot.py
+import os
 
 app = Flask(__name__)
 bot = StockAnalysisBot()
@@ -23,3 +24,7 @@ def analyze():
         "entry_exit": entry_exit
     }
     return jsonify(result)
+
+if name == "main":
+port = int(os.environ.get("PORT", 5000)) # default to 5000 locally
+app.run(host="0.0.0.0", port=port)
