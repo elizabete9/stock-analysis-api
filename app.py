@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from stock_analysis_bot import StockAnalysisBot  # Make sure this file exists
+from stock_analysis_bot import StockAnalysisBot
 import os
 
 app = Flask(__name__)
@@ -9,8 +9,8 @@ bot = StockAnalysisBot()
 def home():
     return render_template("index.html")
 
-@app.route("/analyze", methods=["GET"])
-def analyze_stock():
+@app.route("/api/analyze", methods=["GET"])
+def analyze():
     symbol = request.args.get("symbol", "AAPL")
     df = bot.get_data(symbol, days=30)
     if df is None:
@@ -30,5 +30,5 @@ def analyze_stock():
     return jsonify(result)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # default to 5000 locally
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
